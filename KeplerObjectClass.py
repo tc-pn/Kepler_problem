@@ -20,6 +20,8 @@ class KeplerObject():
         self.y_pos = y_pos # AU
         self.vx = vx # AU / yr
         self.vy = vy # AU / yr
+        self.trajectory = [(self.x_pos, self.y_pos, 
+                            self.vx, self.vy)]
 
     def update_vector(self,
                       new_x : float,
@@ -30,12 +32,14 @@ class KeplerObject():
         self.y_pos = new_y
         self.vx = new_vx
         self.vy = new_vy
+        self.trajectory.append((self.x_pos, self.y_pos, 
+                                self.vx, self.vy))
 
-    def accelerations(self,
-                      pos : float,
-                      mass_other : float,
-                      x_pos_other : float,
-                      y_pos_other : float) -> float:
+    def acceleration(self,
+                     pos : float,
+                     mass_other : float,
+                     x_pos_other : float,
+                     y_pos_other : float) -> float:
         d_x = np.abs(self.x_pos - x_pos_other)
         d_y = np.abs(self.y_pos - y_pos_other)
         out = - self.G * mass_other * pos / (d_x**2. + d_y**2.)**(3./2.)
