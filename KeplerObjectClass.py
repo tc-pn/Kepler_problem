@@ -13,8 +13,6 @@ class KeplerObject():
                  y_pos : float,
                  vx : float,
                  vy : float):
-        self.G = 39.478 # AU**3 * year**-2. / solar mass
-        self.delta_t = 1. / 365.25
         self.mass = mass # solar mass
         self.x_pos = x_pos # AU
         self.y_pos = y_pos # AU

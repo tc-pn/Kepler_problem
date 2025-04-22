@@ -59,31 +59,32 @@ class KeplerSystem():
             self.Object1.vx, self.Object1.vy,
             self.Object2.vx, self.Object2.vy
         ]
-        vector = np.array(vector)
+        vector_new = np.array(vector)
 
         for i in range(nsteps):
-            vector_inter = self.calculate_step(Object1=self.Object1,
-                                        Object2=self.Object2,
-                                        vector=vector,
-                                        delta_t=delta_t/2.)
+            vector_inter = self.calculate_step(first_object=self.Object1,
+                                               second_object=self.Object2,
+                                               vector=vector_new,
+                                               delta_t=delta_t/2.)
             
-            vector_new = self.calculate_step(Object1=self.Object1,
-                                        Object2=self.Object2,
-                                        vector=vector_inter,
-                                        delta_t=delta_t)
+            vector_new = self.calculate_step(first_object=self.Object1,
+                                             second_object=self.Object2,
+                                             vector=vector_inter,
+                                             delta_t=delta_t)
             
             self.Object1.update_vector(new_x=vector_new[0],
-                                    new_y=vector_new[1],
-                                    new_vx=vector_new[4],
-                                    new_vy=vector_new[5])
+                                       new_y=vector_new[1],
+                                       new_vx=vector_new[4],
+                                       new_vy=vector_new[5])
             
             self.Object2.update_vector(new_x=vector_new[2],
-                                    new_y=vector_new[3],
-                                    new_vx=vector_new[6],
-                                    new_vy=vector_new[7])
+                                       new_y=vector_new[3],
+                                       new_vx=vector_new[6],
+                                       new_vy=vector_new[7])
 
-    def calculate_step(Object1 : KeplerObject,
-                       Object2 : KeplerObject,
+    def calculate_step(self,
+                       first_object : KeplerObject,
+                       second_object : KeplerObject,
                        vector : np.ndarray,
                        delta_t : float=1./365.24) -> np.ndarray:
         """
@@ -104,28 +105,28 @@ class KeplerSystem():
         vector_out : np.ndarray
             Updated vector field of the Kepler Equations after timestep delta_t
         """
-        accx_1 = Object1.acceleration(pos=Object1.x_pos,
-                                      mass_other=Object2.mass,
-                                      x_pos_other=Object2.x_pos,
-                                      y_pos_other=Object2.y_pos)
-        accy_1 = Object1.acceleration(pos=Object1.y_pos,
-                                      mass_other=Object2.mass,
-                                      x_pos_other=Object2.x_pos,
-                                      y_pos_other=Object2.y_pos)
+        accx_1 = first_object.acceleration(pos=first_object.x_pos,
+                                           mass_other=second_object.mass,
+                                           x_pos_other=second_object.x_pos,
+                                           y_pos_other=second_object.y_pos)
+        accy_1 = first_object.acceleration(pos=first_object.y_pos,
+                                           mass_other=second_object.mass,
+                                           x_pos_other=second_object.x_pos,
+                                           y_pos_other=second_object.y_pos)
 
-        accx_2 = - Object1.acceleration(pos=Object2.x_pos,
-                                      mass_other=Object1.mass,
-                                      x_pos_other=Object1.x_pos,
-                                      y_pos_other=Object1.y_pos)
-        accy_2 = - Object1.acceleration(pos=Object2.y_pos,
-                                      mass_other=Object1.mass,
-                                      x_pos_other=Object1.x_pos,
-                                      y_pos_other=Object1.y_pos)
+        accx_2 = - second_object.acceleration(pos=second_object.x_pos,
+                                              mass_other=first_object.mass,
+                                              x_pos_other=first_object.x_pos,
+                                              y_pos_other=first_object.y_pos)
+        accy_2 = - second_object.acceleration(pos=second_object.y_pos,
+                                              mass_other=first_object.mass,
+                                              x_pos_other=first_object.x_pos,
+                                              y_pos_other=first_object.y_pos)
         
 
         k = np.array([
-            Object1.vx, Object1.vy,
-            Object2.vx, Object2.vy,
+            first_object.vx, first_object.vy,
+            second_object.vx, second_object.vy,
             accx_1, accy_1,
             accx_2, accy_2
         ])
