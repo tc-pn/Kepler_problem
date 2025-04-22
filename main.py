@@ -6,30 +6,7 @@ import numpy as np
 import pandas as pd
 import pickle
 
-from KeplerObjectClass import KeplerObject
-
-def main(Object1 : KeplerObject,
-         Object2 : KeplerObject,
-         nsteps : int=100) -> pd.DataFrame:
-    """
-    Main function of the solver.
-    It is a standard RK2 procedure.
-    Parameters:
-    Object1 : KeplerObject
-        First object in the system
-    Object2 : KeplerObject
-        Second object in the system
-    nsteps: int
-        Number of time steps over which to solve the equations of motion
-    """
-    delta_t = 1./365.24
-    Object1, Object2 = RK2_procedure(Object1=Object1,
-                               Object2=Object2,
-                               nsteps=nsteps,
-                               delta_t=delta_t)
-    return
-
-
+from SystemKeplerClass import KeplerSystem
 
 if __name__ == "main":
     #G = 6.67e-11
@@ -44,16 +21,12 @@ if __name__ == "main":
     x2, y2 = 1.0167, 0. # earth aphelion in astronomical units
     vx2_ini, vy2_ini = 0., 6.1744 # earth velocity at aphelion
 
-    Sun = KeplerObject(mass=m1,
-                       x_pos=x1,
-                       y_pos=x2,
-                       vx_ini=vx1_ini,
-                       vy_ini=vy1_ini)
-    Earth = KeplerObject(mass=m2,
-                         x_pos=x2,
-                         y_pos=y2,
-                         vx_ini=vx2_ini,
-                         vy_ini=vy2_ini)
+    System = KeplerSystem(m1=m1, m2=m2,
+                          x1_pos=x1, x2_pos=x2,
+                          y1_pos=y1, y2_pos=y2,
+                          vx1=vx1_ini, vx2=vx2_ini,
+                          vy1=vy1_ini, vy2=vy2_ini)
+
 
 
 
