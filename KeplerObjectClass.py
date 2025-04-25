@@ -3,6 +3,7 @@ Module defining the KeplerObject class.
 """
 import numpy as np
 
+
 class KeplerObject():
     """
     Class describing the mass and positions on the (x,y) plane of a massive point-like object.

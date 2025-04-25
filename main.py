@@ -2,9 +2,10 @@
 2D Kepler problem solver (i.e. 2 objets orbiting each other).
 I intend to solve for any masses.
 """
+import pickle
+
 import numpy as np
 import pandas as pd
-import pickle
 
 from SystemKeplerClass import KeplerSystem
 

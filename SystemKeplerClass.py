@@ -2,7 +2,9 @@
 Module defining the KeplerSystem class.
 """
 import numpy as np
+
 from KeplerObjectClass import KeplerObject
+
 
 class KeplerSystem():
     def __init__(self,

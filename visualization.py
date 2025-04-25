@@ -1,10 +1,12 @@
 """
 Visualization module.
 """
+import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.pyplot as plt 
 from matplotlib.animation import FuncAnimation
+
 from SystemKeplerClass import KeplerSystem
+
 
 def show_trajectory(System : KeplerSystem):
     traj_1 = np.array([list(coordinates[:2]) for coordinates in System.Object1.trajectory])
