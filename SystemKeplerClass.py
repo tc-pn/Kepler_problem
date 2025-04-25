@@ -107,20 +107,20 @@ class KeplerSystem():
         vector_out : np.ndarray
             Updated vector field of the Kepler Equations after timestep delta_t
         """
-        accx_1 = first_object.acceleration(pos=first_object.x_pos,
+        accx_1 = - first_object.acceleration(rel_pos=(first_object.y_pos - second_object.y_pos),
                                            mass_other=second_object.mass,
                                            x_pos_other=second_object.x_pos,
                                            y_pos_other=second_object.y_pos)
-        accy_1 = first_object.acceleration(pos=first_object.y_pos,
+        accy_1 = - first_object.acceleration(rel_pos=(first_object.y_pos - second_object.y_pos),
                                            mass_other=second_object.mass,
                                            x_pos_other=second_object.x_pos,
                                            y_pos_other=second_object.y_pos)
 
-        accx_2 = - second_object.acceleration(pos=second_object.x_pos,
+        accx_2 = second_object.acceleration(rel_pos=(second_object.x_pos - first_object.x_pos),
                                               mass_other=first_object.mass,
                                               x_pos_other=first_object.x_pos,
                                               y_pos_other=first_object.y_pos)
-        accy_2 = - second_object.acceleration(pos=second_object.y_pos,
+        accy_2 = second_object.acceleration(rel_pos=(second_object.y_pos - first_object.y_pos),
                                               mass_other=first_object.mass,
                                               x_pos_other=first_object.x_pos,
                                               y_pos_other=first_object.y_pos)

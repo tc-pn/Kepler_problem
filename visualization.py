@@ -8,9 +8,9 @@ from matplotlib.animation import FuncAnimation
 from SystemKeplerClass import KeplerSystem
 
 
-def show_trajectory(System : KeplerSystem):
-    traj_1 = np.array([list(coordinates[:2]) for coordinates in System.Object1.trajectory])
-    traj_2 = np.array([list(coordinates[:2]) for coordinates in System.Object2.trajectory])
+def show_trajectory_anim(System : KeplerSystem):
+    traj_1 = np.array(System.Object1.positions)
+    traj_2 = np.array(System.Object2.positions)
 
     fig, ax = plt.subplots(1,1)
     line, = ax.plot([], [], lw=2)
@@ -29,3 +29,15 @@ def animate(n : int,
     line.set_ydata(traj[:n, 1])
     return line,
 
+def show_trajectory(System : KeplerSystem):
+    traj_1 = np.array(System.Object1.positions)
+    traj_2 = np.array(System.Object2.positions)
+
+    fig, ax = plt.subplots(1,1, figsize=(8,8))
+    ax.plot(traj_2[:,0], traj_2[:,1], 
+            color="blue")
+    ax.plot(traj_1[:,0], traj_1[:,1], 
+            color="blue")
+    ax.grid()
+    plt.show(block=False)
+    pass
