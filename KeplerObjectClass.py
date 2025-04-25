@@ -44,3 +44,8 @@ class KeplerObject():
         d_y = np.abs(self.y_pos - y_pos_other)
         out = - self.G * mass_other * rel_pos / (d_x**2. + d_y**2.)**(3./2.)
         return out
+    
+    def kinetic_energy(self) -> float:
+        k_energy = 0.5 * self.mass * np.sum([velocity**2. 
+                                                   for velocity in self.velocities])
+        return k_energy
