@@ -139,7 +139,7 @@ class KeplerSystem():
 
     def total_energy(self) -> float:
         total_kinetic_energy = self.Object1.kinetic_energy() + self.Object2.kinetic_energy()
-        potential_energy = - 2. * self.Object1.G * self.Object1.mass * self.Object2.mass
+        potential_energy = - self.Object1.G * self.Object1.mass * self.Object2.mass
         relative_distance = np.sqrt((self.Object1.x_pos - self.Object2.x_pos)**2. + (self.Object1.y_pos - self.Object2.y_pos)**2.)
         potential_energy = potential_energy / relative_distance
         return total_kinetic_energy + potential_energy

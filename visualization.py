@@ -7,7 +7,6 @@ from matplotlib.animation import FuncAnimation
 
 from SystemKeplerClass import KeplerSystem
 
-
 def show_trajectory_anim(System : KeplerSystem):
     traj_1 = np.array(System.Object1.positions)
     traj_2 = np.array(System.Object2.positions)
@@ -40,4 +39,8 @@ def show_trajectory(System : KeplerSystem):
             color="blue")
     ax.grid()
     plt.show(block=False)
+    pass
+
+def show_total_energy(System : KeplerSystem):
+    
     pass

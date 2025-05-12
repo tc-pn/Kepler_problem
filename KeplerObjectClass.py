@@ -46,6 +46,6 @@ class KeplerObject():
         return out
     
     def kinetic_energy(self) -> float:
-        k_energy = 0.5 * self.mass * np.sum([velocity**2. 
-                                                   for velocity in self.velocities])
+        k_energy = 0.5 * self.mass * np.sum([np.array(velocity)**2.
+                                                      for velocity in self.velocities])
         return k_energy
