@@ -140,64 +140,20 @@ class KeplerSystem():
                 nsteps : int=100,
                 delta_t : float=1./365.24):
         
-        f_object = self.Object1
-        s_object = self.Object2
-        vector_pos = np.array([f_object.x_pos, f_object.y_pos,
-                               s_object.x_pos, s_object.y_pos])
-        vector_v = np.array([f_object.vx, f_object.vy,
-                             s_object.vx, s_object.vy])
+        vector_pos = np.array([self.Object1.x_pos, self.Object1.y_pos,
+                               self.Object2.x_pos, self.Object2.y_pos])
+        vector_v = np.array([self.Object1.vx, self.Object1.vy,
+                             self.Object2.vx, self.Object2.vy])
         
         vector_pos_new = vector_pos
         vector_v_new = vector_v
 
         for i in range(nsteps):
-            accx_1 = f_object.acceleration(rel_pos=(f_object.y_pos - s_object.y_pos),
-                                            mass_other=s_object.mass,
-                                            x_pos_other=s_object.x_pos,
-                                            y_pos_other=s_object.y_pos)
-            accy_1 = f_object.acceleration(rel_pos=(f_object.y_pos - s_object.y_pos),
-                                            mass_other=s_object.mass,
-                                            x_pos_other=s_object.x_pos,
-                                            y_pos_other=s_object.y_pos)
-
-            accx_2 = s_object.acceleration(rel_pos=(s_object.x_pos - f_object.x_pos),
-                                                mass_other=f_object.mass,
-                                                x_pos_other=f_object.x_pos,
-                                                y_pos_other=f_object.y_pos)
-            accy_2 = s_object.acceleration(rel_pos=(s_object.y_pos - f_object.y_pos),
-                                                mass_other=f_object.mass,
-                                                x_pos_other=f_object.x_pos,
-                                                y_pos_other=f_object.y_pos)
-            
-            vector_a = np.array([accx_1, accy_1, accx_2, accy_2])
-
+            vector_a = self.calculate_acc_vector(vector_pos_new=vector_pos_new)
             vector_pos_new = vector_pos_new + vector_v_new * delta_t + 0.5 * vector_a * delta_t**2.
-            rel_pos = vector_pos_new[0] - vector_pos_new[2]
-            accx_1_new = - f_object.acceleration(rel_pos=rel_pos,
-                                            mass_other=s_object.mass,
-                                            x_pos_other=vector_pos_new[2],
-                                            y_pos_other=vector_pos_new[3])
-            rel_pos = vector_pos_new[1] - vector_pos_new[-1]
-            accy_1_new = - f_object.acceleration(rel_pos=rel_pos,
-                                            mass_other=s_object.mass,
-                                            x_pos_other=vector_pos_new[2],
-                                            y_pos_other=vector_pos_new[3])
-            rel_pos = vector_pos_new[2] - vector_pos_new[0]
-            accx_2_new = s_object.acceleration(rel_pos=rel_pos,
-                                                mass_other=f_object.mass,
-                                                x_pos_other=vector_pos_new[0],
-                                                y_pos_other=vector_pos_new[1])
-            rel_pos = vector_pos_new[-1] - vector_pos_new[1]
-            accy_2_new = s_object.acceleration(rel_pos=rel_pos,
-                                                mass_other=f_object.mass,
-                                                x_pos_other=vector_pos_new[0],
-                                                y_pos_other=vector_pos_new[1])
-
-            vector_a_new = np.array([accx_1_new, accy_1_new, 
-                                     accx_2_new, accy_2_new])
             
+            vector_a_new = self.calculate_acc_vector(vector_pos_new=vector_pos_new)
             vector_v_new = vector_v_new + 0.5 * (vector_a + vector_a_new) * delta_t
-
             vector_new = list(vector_pos_new) + list(vector_v_new)
 
             self.Object1.update_vector(new_x=vector_new[0],
@@ -210,10 +166,32 @@ class KeplerSystem():
                                        new_vx=vector_new[6],
                                        new_vy=vector_new[7])
 
+    def calculate_acc_vector(self,
+                             vector_pos_new : np.ndarray) -> np.ndarray:
+        rel_pos = (self.Object1.y_pos - self.Object2.y_pos)
+        accx_1 = self.Object1.acceleration(rel_pos=rel_pos,
+                                        mass_other=self.Object2.mass,
+                                        x_pos_other=self.Object2.x_pos,
+                                        y_pos_other=self.Object2.y_pos)
+        rel_pos = (self.Object1.y_pos - self.Object2.y_pos)
+        accy_1 = self.Object1.acceleration(rel_pos=rel_pos,
+                                        mass_other=self.Object2.mass,
+                                        x_pos_other=self.Object2.x_pos,
+                                        y_pos_other=self.Object2.y_pos)
         
-
-    # calculer x(i+1) avec x_i, v_i et a_i
-    # calculer v(i+1) à partir de a_i+1
+        rel_pos = (self.Object2.Object2ject.x_pos - self.Object1.x_pos)
+        accx_2 = self.Object2.acceleration(rel_pos=rel_pos,
+                                        mass_other=self.Object1.mass,
+                                        x_pos_other=self.Object1.x_pos,
+                                        y_pos_other=self.Object1.y_pos)
+        
+        rel_pos = (self.Object2.y_pos - self.Object1.y_pos)
+        accy_2 = self.Object2.acceleration(rel_pos=rel_pos,
+                                        mass_other=self.Object1.mass,
+                                        x_pos_other=self.Object1.x_pos,
+                                        y_pos_other=self.Object1.y_pos)
+        out = np.array([accx_1, accy_1, accx_2, accy_2])
+        return out
 
     def total_energy(self) -> float:
         total_kinetic_energy = self.Object1.kinetic_energy() + self.Object2.kinetic_energy()
